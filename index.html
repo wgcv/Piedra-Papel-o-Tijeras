@@ -20,6 +20,7 @@
               src="./img/piedra.png"
               height="38"
               width="38"
+              onclick="play(0);"
             />
           </button>
         </div>
@@ -29,6 +30,7 @@
               src="./img/papel.png"
               height="38"
               width="38"
+              onclick="play(1);"
             />
           </button>
         </div>
@@ -38,6 +40,7 @@
               src="./img/tijeras.png"
               height="38"
               width="38"
+              onclick="play(2);"
             />
           </button>
         </div>
@@ -50,5 +53,86 @@
     </div>
     <div id="message" class="container-lg clearfix"></div>
 
+    <script>
+      imgComputer = document.getElementById('imgComputer')
+      message = document.getElementById('message')
+      images = ['piedra.png', 'papel.png', 'tijeras.png']
+      imagesCount = 0
+      randomAnimation = true
+      winMessage = `
+            <div class="col-6 p-2 mx-auto">
+                <div class="flash mt-3 flash-success">
+                    Ganaste
+                </div>
+            </div>`
+      lossMessage = `
+            <div class="col-6 p-2 mx-auto">
+                <div class="flash mt-3 flash-error">
+                    Perdiste
+                </div>
+            </div>`
+      tieMessage = `
+            <div class="col-6 p-2 mx-auto">
+                <div class="flash mt-3 flash">
+                    Empate
+                </div>
+            </div>`
+      function randomImg () {
+        if (randomAnimation) {
+          imgComputer.src = './img/' + images[imagesCount]
+          imagesCount++
+          if (imagesCount >= images.length) {
+            imagesCount = 0
+          }
+          setTimeout(randomImg, 100)
+        }
+      }
+
+      function play (player) {
+        randomAnimation = false
+        computer = Math.floor(Math.random() * images.length)
+        imgComputer.src = './img/' + images[computer]
+        checkResults(player, computer)
+      }
+
+      function checkResults (player, computer) {
+        // Iguales es empate
+        if (player == computer) {
+          message.innerHTML = tieMessage
+          return
+        }
+        // Piedra pierde a papel
+        if (player == 0 && computer == 1) {
+          message.innerHTML = lossMessage
+          return
+        }
+        // Piedra gana a tijeras
+        if (player == 0 && computer == 2) {
+          message.innerHTML = winMessage
+          return
+        }
+        // Papel gana a piedra
+        if (player == 1 && computer == 0) {
+          message.innerHTML = winMessage
+          return
+        }
+        // Papel pierde a tijeras
+        if (player == 1 && computer == 2) {
+          message.innerHTML = lossMessage
+          return
+        }
+        // Tijeras pierde a piedra
+        if (player == 2 && computer == 0) {
+          message.innerHTML = lossMessage
+          return
+        }
+        // Tijeras gana a papel
+        if (player == 2 && computer == 1) {
+          message.innerHTML = winMessage
+          return
+        }
+      }
+      randomImg()
+    </script>
   </body>
 </html>
